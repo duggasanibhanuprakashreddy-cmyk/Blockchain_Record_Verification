@@ -16,29 +16,65 @@ from storage import load_blockchain, save_blockchain
 
 class handler(BaseHTTPRequestHandler):
 
-    def _set_cors_headers(self, status=200):
+    def _set_headers(self, status=200, content_type="application/json"):
         self.send_response(status)
-        self.send_header("Content-Type", "application/json")
+        self.send_header("Content-Type", content_type)
         self.send_header("Access-Control-Allow-Origin", "*")
         self.send_header("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
         self.send_header("Access-Control-Allow-Headers", "Content-Type, Authorization")
         self.end_headers()
 
     def do_OPTIONS(self):
-        self._set_cors_headers(200)
+        self._set_headers(200)
+
+    def _serve_file(self, filename, content_type):
+        candidates = [
+            os.path.join(BASE_DIR, filename),
+            os.path.join(BASE_DIR, "public", filename),
+            os.path.join(os.path.dirname(__file__), filename),
+            filename
+        ]
+        file_path = None
+        for cand in candidates:
+            if os.path.exists(cand) and os.path.isfile(cand):
+                file_path = cand
+                break
+
+        if file_path:
+            with open(file_path, "rb") as f:
+                content = f.read()
+            self._set_headers(200, content_type)
+            self.wfile.write(content)
+            return True
+        return False
 
     def do_GET(self):
         parsed_url = urlparse(self.path)
-        path = parsed_url.path.rstrip("/")
+        path = parsed_url.path.strip()
 
-        # Initialize / load blockchain
+        # 1. Root and frontend static routes (serve HTML/CSS/JS even if Vercel routes root to Python)
+        if path in ("", "/", "/index.html"):
+            if self._serve_file("index.html", "text/html; charset=utf-8"):
+                return
+
+        if path == "/style.css":
+            if self._serve_file("style.css", "text/css; charset=utf-8"):
+                return
+
+        if path == "/script.js":
+            if self._serve_file("script.js", "application/javascript; charset=utf-8"):
+                return
+
+        # 2. Blockchain API endpoints
         raw_data = load_blockchain()
         if raw_data:
             bc = Blockchain.from_data(raw_data)
         else:
             bc = Blockchain()
 
-        if path in ("/api/blockchain", "/api/records"):
+        clean_path = path.rstrip("/")
+
+        if clean_path in ("/api/blockchain", "/api/records"):
             blocks = []
             for block in bc.chain:
                 blocks.append({
@@ -49,7 +85,7 @@ class handler(BaseHTTPRequestHandler):
                     "previous_hash": block.previous_hash,
                     "current_hash": block.current_hash
                 })
-            self._set_cors_headers(200)
+            self._set_headers(200, "application/json")
             self.wfile.write(json.dumps({
                 "status": "success",
                 "total_blocks": len(blocks),
@@ -58,9 +94,9 @@ class handler(BaseHTTPRequestHandler):
             }).encode("utf-8"))
             return
 
-        elif path == "/api/integrity":
+        elif clean_path == "/api/integrity":
             is_valid = bc.is_chain_valid()
-            self._set_cors_headers(200)
+            self._set_headers(200, "application/json")
             self.wfile.write(json.dumps({
                 "status": "success",
                 "is_valid": is_valid,
@@ -69,19 +105,27 @@ class handler(BaseHTTPRequestHandler):
             }).encode("utf-8"))
             return
 
-        # Default /api status response (matching existing contract)
-        response = {
-            "project": "BlockVerify",
-            "status": "running",
-            "message": "Blockchain-Based Tamper-Proof Record Verification API",
-            "algorithm": "SHA-256",
-            "total_blocks": len(bc.chain),
-            "total_records": max(0, len(bc.chain) - 1),
-            "is_valid": bc.is_chain_valid()
-        }
+        elif clean_path.startswith("/api"):
+            response = {
+                "project": "BlockVerify",
+                "status": "running",
+                "message": "Blockchain-Based Tamper-Proof Record Verification API",
+                "algorithm": "SHA-256",
+                "total_blocks": len(bc.chain),
+                "total_records": max(0, len(bc.chain) - 1),
+                "is_valid": bc.is_chain_valid()
+            }
+            self._set_headers(200, "application/json")
+            self.wfile.write(json.dumps(response).encode("utf-8"))
+            return
 
-        self._set_cors_headers(200)
-        self.wfile.write(json.dumps(response).encode("utf-8"))
+        # Fallback to index.html for any other non-API route
+        if self._serve_file("index.html", "text/html; charset=utf-8"):
+            return
+
+        # Final fallback JSON
+        self._set_headers(404, "application/json")
+        self.wfile.write(json.dumps({"error": "Not found"}).encode("utf-8"))
 
     def do_POST(self):
         try:
@@ -107,7 +151,7 @@ class handler(BaseHTTPRequestHandler):
                 cgpa = data.get("cgpa", "").strip()
 
                 if not record_id:
-                    self._set_cors_headers(400)
+                    self._set_headers(400, "application/json")
                     self.wfile.write(json.dumps({"error": "record_id is required"}).encode("utf-8"))
                     return
 
@@ -121,7 +165,7 @@ class handler(BaseHTTPRequestHandler):
                         break
 
                 if not found_block:
-                    self._set_cors_headers(404)
+                    self._set_headers(404, "application/json")
                     self.wfile.write(json.dumps({
                         "status": "not_found",
                         "message": f"Record ID {record_id} not found in blockchain ledger."
@@ -131,7 +175,7 @@ class handler(BaseHTTPRequestHandler):
                 stored_hash = found_block.record_hash
                 is_match = stored_hash == generated_hash
 
-                self._set_cors_headers(200)
+                self._set_headers(200, "application/json")
                 self.wfile.write(json.dumps({
                     "status": "verified" if is_match else "tampered",
                     "record_id": record_id,
@@ -151,13 +195,12 @@ class handler(BaseHTTPRequestHandler):
                 cgpa = data.get("cgpa", "").strip()
 
                 if not all([record_id, student_name, course, cgpa]):
-                    self._set_cors_headers(400)
+                    self._set_headers(400, "application/json")
                     self.wfile.write(json.dumps({"error": "record_id, student_name, course, cgpa are required"}).encode("utf-8"))
                     return
 
-                # Duplicate check
                 if any(b.record_id == record_id for b in bc.chain):
-                    self._set_cors_headers(409)
+                    self._set_headers(409, "application/json")
                     self.wfile.write(json.dumps({"error": f"Record ID {record_id} already exists."}).encode("utf-8"))
                     return
 
@@ -166,7 +209,7 @@ class handler(BaseHTTPRequestHandler):
                 bc.add_block(record_id, record_hash)
                 save_blockchain(bc)
 
-                self._set_cors_headers(201)
+                self._set_headers(201, "application/json")
                 self.wfile.write(json.dumps({
                     "status": "added",
                     "record_id": record_id,
@@ -176,12 +219,12 @@ class handler(BaseHTTPRequestHandler):
                 }).encode("utf-8"))
                 return
 
-            # 3. Default hashing / backwards-compatible POST
+            # 3. Default hashing endpoint
             record_id = data.get("record_id")
             record_data = data.get("record_data")
 
             if not record_id or not record_data:
-                self._set_cors_headers(400)
+                self._set_headers(400, "application/json")
                 self.wfile.write(json.dumps({"error": "record_id and record_data are required"}).encode("utf-8"))
                 return
 
@@ -195,9 +238,9 @@ class handler(BaseHTTPRequestHandler):
                 "status": "Hash generated successfully"
             }
 
-            self._set_cors_headers(200)
+            self._set_headers(200, "application/json")
             self.wfile.write(json.dumps(response).encode("utf-8"))
 
         except Exception as error:
-            self._set_cors_headers(500)
+            self._set_headers(500, "application/json")
             self.wfile.write(json.dumps({"error": str(error)}).encode("utf-8"))
