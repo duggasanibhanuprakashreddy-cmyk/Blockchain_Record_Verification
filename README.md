@@ -193,3 +193,10 @@ BlockVerify follows these steps:
               ▼                 ▼
          ✅ Genuine        ⚠️ Tampered
 main
+ Technologies Used
+
+- Python – Core programming language
+- Streamlit – Web application interface
+- SHA-256 – Cryptographic hashing
+- JSON – Local blockchain data storage
+- Git & GitHub – Version control and project collaboration
