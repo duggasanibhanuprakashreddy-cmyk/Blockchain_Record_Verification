@@ -9,7 +9,6 @@ class Block:
         self.record_id = record_id
         self.record_hash = record_hash
         self.previous_hash = previous_hash
-
         self.current_hash = self.calculate_hash()
 
     def calculate_hash(self):
@@ -20,24 +19,16 @@ class Block:
             + self.record_hash
             + self.previous_hash
         )
-
         return hashlib.sha256(block_data.encode()).hexdigest()
 
 
 class Blockchain:
-
     def __init__(self):
         self.chain = []
         self.create_genesis_block()
 
     def create_genesis_block(self):
-        genesis_block = Block(
-            0,
-            "GENESIS",
-            "0",
-            "0"
-        )
-
+        genesis_block = Block(0, "GENESIS", "0", "0")
         self.chain.append(genesis_block)
 
     def add_block(self, record_id, record_hash):
@@ -53,16 +44,16 @@ class Blockchain:
         self.chain.append(new_block)
 
     def is_chain_valid(self):
+        """Verify that all blocks maintain valid hashes and chain links."""
         for i in range(1, len(self.chain)):
-
             current_block = self.chain[i]
             previous_block = self.chain[i - 1]
 
-            # Check current block hash
+            # Check whether the current block has been modified
             if current_block.current_hash != current_block.calculate_hash():
                 return False
 
-            # Check connection with previous block
+            # Check whether the block is correctly linked
             if current_block.previous_hash != previous_block.current_hash:
                 return False
 
@@ -70,14 +61,10 @@ class Blockchain:
 
     @classmethod
     def from_data(cls, data):
-
         blockchain = cls()
-
-        # Remove automatically created Genesis block
         blockchain.chain = []
 
         for item in data:
-
             block = Block(
                 item["index"],
                 item["record_id"],
@@ -85,10 +72,7 @@ class Blockchain:
                 item["previous_hash"]
             )
 
-            # Restore original timestamp
             block.timestamp = item["timestamp"]
-
-            # Restore original current hash
             block.current_hash = item["current_hash"]
 
             blockchain.chain.append(block)
