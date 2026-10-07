@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BlockVerify - Secure Record Verification</title>
+  <meta name="description" content="Blockchain-Based Tamper-Proof Record Verification System using cryptographic SHA-256 and chained ledger.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚡</text></svg>">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- MOBILE NAVIGATION TOGGLE -->
+  <button class="mobile-nav-toggle" id="mobile-nav-toggle" aria-label="Toggle navigation">☰</button>
+
+  <!-- SIDEBAR (Matching Image 1) -->
+  <aside class="sidebar">
+    <div class="brand">
+      <h1 class="brand-title">⚡ BlockVerify</h1>
+      <p class="brand-caption">Secure Record Verification</p>
+    </div>
+
+    <hr class="divider">
+
+    <!-- NAVIGATION MENU -->
+    <ul class="nav-menu">
+      <li class="nav-item active" id="nav-dashboard" data-page="dashboard">
+        <span class="active-dot"></span>
+        <span>🏠 Dashboard</span>
+      </li>
+      <li class="nav-item" id="nav-add" data-page="add">
+        <span class="active-dot" style="opacity: 0;"></span>
+        <span>➕ Add Record</span>
+      </li>
+      <li class="nav-item" id="nav-verify" data-page="verify">
+        <span class="active-dot" style="opacity: 0;"></span>
+        <span>🔍 Verify Record</span>
+      </li>
+      <li class="nav-item" id="nav-records" data-page="records">
+        <span class="active-dot" style="opacity: 0;"></span>
+        <span>📜 Records</span>
+      </li>
+      <li class="nav-item" id="nav-blockchain" data-page="blockchain">
+        <span class="active-dot" style="opacity: 0;"></span>
+        <span>⛓️ Blockchain</span>
+      </li>
+      <li class="nav-item" id="nav-integrity" data-page="integrity">
+        <span class="active-dot" style="opacity: 0;"></span>
+        <span>🛡️ Integrity</span>
+      </li>
+    </ul>
+
+    <hr class="divider">
+
+    <!-- THEME TOGGLE -->
+    <button class="theme-btn" id="theme-toggle-btn">
+      ☀️ Light Mode
+    </button>
+
+    <hr class="divider">
+
+    <!-- STATUS PILL & METRIC -->
+    <div class="status-pill" id="sidebar-status-pill">
+      <span class="pulse-circle"></span>
+      <span>🟢 SYSTEM SECURE</span>
+    </div>
+
+    <div class="sidebar-metric">
+      <div class="sidebar-metric-label">Stored Records</div>
+      <div class="sidebar-metric-val" id="sidebar-stored-records">4</div>
+    </div>
+
+    <hr class="divider">
+
+    <!-- SECURITY STACK -->
+    <div class="security-stack">
+      <small style="text-transform: uppercase; letter-spacing: 0.5px; font-weight: 700;">SECURITY STACK</small>
+      <span>⚡ SHA-256</span>
+      <span>⛓️ Blockchain</span>
+      <span>🐍 Python</span>
+      <span>🖥️ Streamlit & Vercel</span>
+      <span>📄 JSON Storage</span>
+    </div>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main class="main-content">
+
+    <!-- ============================================================== -->
+    <!-- 1. DASHBOARD VIEW (Exact Match to Image 1)                     -->
+    <!-- ============================================================== -->
+    <section class="page-view active" id="page-dashboard">
+      <!-- HERO CARD -->
+      <div class="hero">
+        <div class="hero-icon">⚡</div>
+        <div class="hero-title">Block<span>Verify</span></div>
+        <h2 class="hero-subtitle">Blockchain-Based Tamper-Proof Record Verification</h2>
+        <p class="hero-desc">
+          Secure digital records using cryptographic hashing and blockchain technology. Detect unauthorized modifications by comparing record fingerprints.
+        </p>
+      </div>
+
+      <!-- SYSTEM STATUS BANNER -->
+      <div class="status-banner" id="dash-status-banner">
+        <span>🟢</span>
+        <span>SYSTEM SECURE — Blockchain integrity has been verified successfully.</span>
+      </div>
+
+      <!-- 4 METRICS CARDS -->
+      <div class="metrics-grid">
+        <div class="metric-card">
+          <div class="metric-label">⛓️ Total Blocks</div>
+          <div class="metric-value" id="metric-total-blocks">5</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">📄 Records</div>
+          <div class="metric-value" id="metric-total-records">4</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">🔐 Hash Algorithm</div>
+          <div class="metric-value" style="font-size: 24px;">SHA-256</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">🛡️ Status</div>
+          <div class="metric-value" id="metric-status" style="color: var(--status-green);">VALID</div>
+        </div>
+      </div>
+
+      <hr class="divider">
+
+      <!-- BLOCKCHAIN FLOW -->
+      <h3 class="section-header">⛓️ Blockchain Flow</h3>
+      <div class="flow-container" id="dash-flow-container">
+        <!-- Dynamically injected blocks -->
+      </div>
+
+      <hr class="divider">
+
+      <!-- HOW IT WORKS -->
+      <h3 class="section-header">⚡ How BlockVerify Works</h3>
+      <div class="features-grid">
+        <div class="feature-box">
+          <h4>📄 Record</h4>
+          <p>Enter the digital record details such as ID, name, course, and CGPA.</p>
+        </div>
+        <div class="feature-box">
+          <h4>🔐 Hash</h4>
+          <p>Generate a unique, deterministic SHA-256 cryptographic fingerprint.</p>
+        </div>
+        <div class="feature-box">
+          <h4>⛓️ Blockchain</h4>
+          <p>Store the fingerprint inside a cryptographically linked, immutable block.</p>
+        </div>
+        <div class="feature-box">
+          <h4>🛡️ Verify</h4>
+          <p>Compare regenerated hashes to instantly detect unauthorized tampering.</p>
+        </div>
+      </div>
+
+      <hr class="divider">
+
+      <!-- SECURITY PRINCIPLE -->
+      <h3 class="section-header">🎯 Security Principle</h3>
+      <div class="principle-grid">
+        <div class="principle-card verified">
+          ✅ Same record → Same hash → VERIFIED
+        </div>
+        <div class="principle-card tampered">
+          ❌ Modified record → Different hash → TAMPERED
+        </div>
+      </div>
+
+      <footer class="footer">
+        ⚡ BlockVerify • Blockchain Record Verification System
+      </footer>
+    </section>
+
+    <!-- ============================================================== -->
+    <!-- 2. ADD RECORD VIEW                                             -->
+    <!-- ============================================================== -->
+    <section class="page-view" id="page-add">
+      <h2 class="section-header">➕ Add New Record</h2>
+      <p class="section-caption">
+        Create a secure digital fingerprint and store the record inside the blockchain.
+      </p>
+
+      <div class="form-card">
+        <div class="quick-chips">
+          <span class="chip-label">Quick autofill:</span>
+          <button type="button" class="chip-btn" data-fill-add="sample1">Fill Ananya Sharma (R25EH045)</button>
+          <button type="button" class="chip-btn" data-fill-add="sample2">Fill Kiran Kumar (R25CS102)</button>
+        </div>
+
+        <form id="add-record-form">
+          <div class="form-grid-2">
+            <div class="input-field">
+              <label for="add-record-id">Record ID</label>
+              <input type="text" id="add-record-id" placeholder="Example: R25EH043" required>
+            </div>
+            <div class="input-field">
+              <label for="add-student-name">Student Name</label>
+              <input type="text" id="add-student-name" placeholder="Example: Bhanuprakash Reddy" required>
+            </div>
+          </div>
+
+          <div class="form-grid-2">
+            <div class="input-field">
+              <label for="add-course">Course</label>
+              <input type="text" id="add-course" placeholder="Example: B.Tech AI & DS" required>
+            </div>
+            <div class="input-field">
+              <label for="add-cgpa">CGPA</label>
+              <input type="text" id="add-cgpa" placeholder="Example: 8.3" required>
+            </div>
+          </div>
+
+          <button type="submit" class="btn-primary">
+            ⚡ Secure & Add Record
+          </button>
+        </form>
+
+        <div id="add-result-box" style="display: none;"></div>
+      </div>
+    </section>
+
+    <!-- ============================================================== -->
+    <!-- 3. VERIFY RECORD VIEW                                          -->
+    <!-- ============================================================== -->
+    <section class="page-view" id="page-verify">
+      <h2 class="section-header">🔍 Verify Record</h2>
+      <p class="section-caption">
+        Enter the record details. BlockVerify will generate a new SHA-256 hash and compare it with the stored hash.
+      </p>
+
+      <div class="form-card">
+        <div class="quick-chips">
+          <span class="chip-label">Quick Test Scenarios:</span>
+          <button type="button" class="chip-btn" data-fill-verify="genuine" style="color: var(--status-green); border-color: var(--status-green);">
+            🟢 Test Genuine Record (R25EH043)
+          </button>
+          <button type="button" class="chip-btn" data-fill-verify="tampered" style="color: var(--status-red); border-color: var(--status-red);">
+            🔴 Test Tampered Record (CGPA 8.3 → 9.9)
+          </button>
+        </div>
+
+        <form id="verify-record-form">
+          <div class="form-grid-2">
+            <div class="input-field">
+              <label for="verify-record-id">Record ID</label>
+              <input type="text" id="verify-record-id" placeholder="Example: R25EH043" required>
+            </div>
+            <div class="input-field">
+              <label for="verify-student-name">Student Name</label>
+              <input type="text" id="verify-student-name" placeholder="Example: Bhanuprakash Reddy" required>
+            </div>
+          </div>
+
+          <div class="form-grid-2">
+            <div class="input-field">
+              <label for="verify-course">Course</label>
+              <input type="text" id="verify-course" placeholder="Example: B.Tech AI & DS" required>
+            </div>
+            <div class="input-field">
+              <label for="verify-cgpa">CGPA</label>
+              <input type="text" id="verify-cgpa" placeholder="Example: 8.3" required>
+            </div>
+          </div>
+
+          <button type="submit" class="btn-primary">
+            🔍 Verify Record
+          </button>
+        </form>
+
+        <div id="verify-result-box" style="display: none; margin-top: 24px;"></div>
+      </div>
+    </section>
+
+    <!-- ============================================================== -->
+    <!-- 4. RECORDS VIEW                                                -->
+    <!-- ============================================================== -->
+    <section class="page-view" id="page-records">
+      <h2 class="section-header">📜 Stored Records</h2>
+      <p class="section-caption">
+        Records currently registered in the blockchain ledger.
+      </p>
+
+      <div class="expander-list" id="records-list-container">
+        <!-- Dynamically injected records -->
+      </div>
+    </section>
+
+    <!-- ============================================================== -->
+    <!-- 5. BLOCKCHAIN EXPLORER VIEW                                    -->
+    <!-- ============================================================== -->
+    <section class="page-view" id="page-blockchain">
+      <h2 class="section-header">⛓️ Blockchain Explorer</h2>
+      <p class="section-caption">
+        Explore every block and its cryptographic connections.
+      </p>
+
+      <div class="expander-list" id="explorer-list-container">
+        <!-- Dynamically injected blocks -->
+      </div>
+    </section>
+
+    <!-- ============================================================== -->
+    <!-- 6. INTEGRITY VIEW                                              -->
+    <!-- ============================================================== -->
+    <section class="page-view" id="page-integrity">
+      <h2 class="section-header">🛡️ Blockchain Integrity</h2>
+      <p class="section-caption">
+        Check whether the blockchain structure and block hashes are cryptographically valid.
+      </p>
+
+      <div class="status-banner" id="integrity-status-banner">
+        <span>🟢</span>
+        <div>
+          <strong>BLOCKCHAIN IS VALID</strong><br>
+          <span style="font-size: 13.5px; opacity: 0.9;">All blocks passed the integrity check.</span>
+        </div>
+      </div>
+
+      <div class="metrics-grid">
+        <div class="metric-card">
+          <div class="metric-label">Blockchain Status</div>
+          <div class="metric-value" id="integrity-metric-status" style="color: var(--status-green);">SECURE</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">Blocks Checked</div>
+          <div class="metric-value" id="integrity-metric-checked">5</div>
+        </div>
+      </div>
+
+      <div class="form-card" style="margin-top: 20px;">
+        <h4 style="font-size: 16px; margin-bottom: 8px;">🧪 Avalanche Effect & Tamper Simulation Lab</h4>
+        <p style="font-size: 14px; color: var(--text-muted); margin-bottom: 18px;">
+          Want to see blockchain tamper-detection in action? Click below to simulate an unauthorized modification to a recorded block's data. Watch how the chain immediately fails validation.
+        </p>
+
+        <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+          <button type="button" class="btn-primary" id="simulate-tamper-btn" style="background-color: var(--status-red-bg); border-color: var(--status-red-border); color: var(--status-red); max-width: 300px;">
+            ⚠️ Simulate Attack on Block 1
+          </button>
+          <button type="button" class="btn-primary" id="restore-chain-btn" style="max-width: 250px;">
+            🔄 Restore Original Chain
+          </button>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>

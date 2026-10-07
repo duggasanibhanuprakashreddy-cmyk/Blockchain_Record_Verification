@@ -1,4 +1,3 @@
-jagadeesh-readme-update
 # ⚡ BlockVerify
 
 ### Blockchain-Based Tamper-Proof Record Verification
@@ -7,47 +6,43 @@ BlockVerify is a secure digital record verification system that uses **SHA-256 c
 
 The system generates a unique cryptographic fingerprint for each record and stores that fingerprint inside a chained block. During verification, the record is hashed again and compared with the stored hash.
 
-If the hashes match, the record is considered **Genuine**.  
-If they do not match, the record is detected as **Tampered**.
+- If the hashes match, the record is considered **Genuine** (Verified ✅).  
+- If they do not match, the record is detected as **Tampered** (Security Alert ⚠️).
 
 ---
 
 ## 🎯 Problem Statement
 
-Digital records can be modified or tampered with after they are created.
+Digital records can be modified or tampered with after they are created. Traditional centralized record systems may not provide an easy, verifiable way to confirm whether the original data has been modified.
 
-Traditional record systems may not provide an easy way to verify whether the original data has been changed.
-
-BlockVerify addresses this problem by creating a tamper-evident record verification system using cryptographic hashing and blockchain concepts.
+BlockVerify addresses this problem by creating a tamper-evident record verification system using cryptographic hashing and blockchain immutability concepts.
 
 ---
 
-## 💡 Proposed Solution
+## 💡 How BlockVerify Works
 
-BlockVerify follows these steps:
-
-1. A digital record is entered into the system.
-2. The record is converted into a SHA-256 hash.
-3. The hash is stored inside a blockchain-style block.
-4. Each block is linked to the previous block using its hash.
-5. During verification, the record is hashed again.
-6. The newly generated hash is compared with the stored hash.
-7. The system reports whether the record is **Genuine** or **Tampered**.
+1. **Add Record:** A digital record (Student ID, Name, Course, CGPA) is entered into the system.
+2. **Cryptographic Fingerprint:** The record is converted into a deterministic SHA-256 hash.
+3. **Chained Ledger:** The hash is anchored inside a blockchain block linked cryptographically to the previous block's hash.
+4. **Verification:** During verification, the record is hashed again using SHA-256.
+5. **Tamper Detection:** The newly generated hash is compared with the blockchain's stored hash.
+6. **Integrity Audit:** The blockchain continuously validates block linkage and internal hash consistency.
 
 ---
 
 ## 🔐 Key Features
 
-- ⚡ Simple and user-friendly interface
-- 🔒 SHA-256 cryptographic hashing
-- ⛓️ Chained blockchain-style ledger
-- 🛡️ Tamper detection
-- 🔎 Record verification
-- 📋 Stored records management
-- 🧱 Blockchain explorer
-- ✅ Blockchain integrity checking
-- 💾 JSON-based persistent storage
-- 🚫 Duplicate record ID protection
+- ⚡ **Interactive Web Interface & Streamlit App**
+- 🔒 **SHA-256 Cryptographic Hashing**
+- ⛓️ **Chained Blockchain-Style Ledger**
+- 🛡️ **Instant Tamper Detection & Avalanche Effect Demonstration**
+- 🔎 **Two-Way Record Verification (Stored vs Generated Hash comparison)**
+- 📋 **Stored Records Management**
+- 🧱 **Blockchain Explorer**
+- ✅ **Blockchain Integrity Checking**
+- 💾 **JSON-Based & Persistent Storage**
+- 🚫 **Duplicate Record ID Protection**
+- ☀️/🌙 **Dark & Light Mode Support**
 
 ---
 
@@ -59,144 +54,69 @@ BlockVerify follows these steps:
                 └────────┬─────────┘
                          │
                          ▼
-                ┌──────────────────┐
-                │  Streamlit UI    │
-                └────────┬─────────┘
-                         │
-              ┌──────────┴──────────┐
-              ▼                     ▼
-      ┌───────────────┐     ┌───────────────┐
-      │  Add Record   │     │ Verify Record │
-      └───────┬───────┘     └───────┬───────┘
-              │                     │
-              ▼                     ▼
-      ┌────────────────────────────────────┐
-      │       SHA-256 Hashing              │
-      └────────────────┬───────────────────┘
-                       │
-                       ▼
-              ┌─────────────────┐
-              │ Blockchain-Style│
-              │     Ledger      │
-              └────────┬────────┘
-                       │
-                       ▼
-              ┌─────────────────┐
-              │ Verification    │
-              └────────┬────────┘
-                       │
-              ┌────────┴────────┐
-              ▼                 ▼
-         ✅ Genuine        ⚠️ Tampered
-## Testing and Verification Flow
-
-The BlockVerify system follows these steps to verify digital records:
-
-1. The user enters a unique Record ID and record details.
-2. The system generates a SHA-256 hash of the record.
-3. The record hash is stored in the blockchain ledger.
-4. During verification, the record is hashed again.
-5. The newly generated hash is compared with the stored hash.
-6. If both hashes match, the record is marked as **Genuine**.
-7. If the hashes do not match, the record is marked as **Tampered**.
-8. The blockchain integrity is also checked using the previous and current block hashes.
-
-This process helps detect unauthorized modifications to stored digital records.
-=======
-# ⚡ BlockVerify
-
-### Blockchain-Based Tamper-Proof Record Verification
-
-BlockVerify is a secure digital record verification system that uses **SHA-256 cryptographic hashing** and a **blockchain-style chained ledger** to detect whether a stored digital record has been modified after creation.
-
-The system generates a unique cryptographic fingerprint for each record and stores that fingerprint inside a chained block. During verification, the record is hashed again and compared with the stored hash.
-
-If the hashes match, the record is considered **Genuine**.  
-If they do not match, the record is detected as **Tampered**.
+        ┌──────────────────────────────────┐
+        │     BlockVerify Web / UI App      │
+        └────────┬─────────────────┬───────┘
+                 │                 │
+      ┌──────────┴──────────┐      │
+      ▼                     ▼      ▼
+┌───────────────┐     ┌───────────────┐
+│  Add Record   │     │ Verify Record │
+└───────┬───────┘     └───────┬───────┘
+        │                     │
+        ▼                     ▼
+┌────────────────────────────────────┐
+│       SHA-256 Hashing              │
+└────────────────┬───────────────────┘
+                 │
+                 ▼
+        ┌─────────────────┐
+        │ Blockchain-Style│
+        │     Ledger      │
+        └────────┬────────┘
+                 │
+                 ▼
+        ┌─────────────────┐
+        │  Verification   │
+        └────────┬────────┘
+                 │
+        ┌────────┴────────┐
+        ▼                 ▼
+   ✅ Genuine        ⚠️ Tampered
+```
 
 ---
 
-## 🎯 Problem Statement
+## 🚀 Running the Project
 
-Digital records can be modified or tampered with after they are created.
+### 1. Run Streamlit Application Locally
+```bash
+# Install dependencies
+pip install -r requirements.txt
 
-Traditional record systems may not provide an easy way to verify whether the original data has been changed.
+# Launch the Streamlit application
+streamlit run app.py
+```
+Access the application at `http://localhost:8501`.
 
-BlockVerify addresses this problem by creating a tamper-evident record verification system using cryptographic hashing and blockchain concepts.
+### 2. Deploying to Streamlit Cloud
+1. Push this repository to GitHub.
+2. Go to [share.streamlit.io](https://share.streamlit.io).
+3. Connect your repository, set the main file path to `app.py`, and click **Deploy**.
 
----
-
-## 💡 Proposed Solution
-
-BlockVerify follows these steps:
-
-1. A digital record is entered into the system.
-2. The record is converted into a SHA-256 hash.
-3. The hash is stored inside a blockchain-style block.
-4. Each block is linked to the previous block using its hash.
-5. During verification, the record is hashed again.
-6. The newly generated hash is compared with the stored hash.
-7. The system reports whether the record is **Genuine** or **Tampered**.
-
----
-
-## 🔐 Key Features
-
-- ⚡ Simple and user-friendly interface
-- 🔒 SHA-256 cryptographic hashing
-- ⛓️ Chained blockchain-style ledger
-- 🛡️ Tamper detection
-- 🔎 Record verification
-- 📋 Stored records management
-- 🧱 Blockchain explorer
-- ✅ Blockchain integrity checking
-- 💾 JSON-based persistent storage
-- 🚫 Duplicate record ID protection
+### 3. Deploying to Vercel
+The repository includes complete web assets (`index.html`) and serverless API handlers (`api/index.py` and `vercel.json`):
+1. Connect your GitHub repository to [Vercel](https://vercel.com).
+2. Deploy with zero configuration.
+3. Access the full interactive web application directly at your `.vercel.app` URL!
 
 ---
 
-## 🏗️ System Architecture
+## 🛠️ Technologies Used
 
-```text
-                ┌──────────────────┐
-                │      User        │
-                └────────┬─────────┘
-                         │
-                         ▼
-                ┌──────────────────┐
-                │  Streamlit UI    │
-                └────────┬─────────┘
-                         │
-              ┌──────────┴──────────┐
-              ▼                     ▼
-      ┌───────────────┐     ┌───────────────┐
-      │  Add Record   │     │ Verify Record │
-      └───────┬───────┘     └───────┬───────┘
-              │                     │
-              ▼                     ▼
-      ┌────────────────────────────────────┐
-      │       SHA-256 Hashing              │
-      └────────────────┬───────────────────┘
-                       │
-                       ▼
-              ┌─────────────────┐
-              │ Blockchain-Style│
-              │     Ledger      │
-              └────────┬────────┘
-                       │
-                       ▼
-              ┌─────────────────┐
-              │ Verification    │
-              └────────┬────────┘
-                       │
-              ┌────────┴────────┐
-              ▼                 ▼
-         ✅ Genuine        ⚠️ Tampered
-main
- Technologies Used
-
-- Python – Core programming language
-- Streamlit – Web application interface
-- SHA-256 – Cryptographic hashing
-- JSON – Local blockchain data storage
-- Git & GitHub – Version control and project collaboration
+- **Python** – Core blockchain logic and cryptographic hashing
+- **Streamlit** – Python-based web application interface
+- **Vanilla HTML5/CSS3/JavaScript** – Vercel-ready frontend web application
+- **SHA-256** – Cryptographic record fingerprinting
+- **JSON** – Local blockchain ledger persistence
+- **Vercel Serverless** – Cloud API endpoints
