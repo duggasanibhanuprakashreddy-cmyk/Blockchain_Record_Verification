@@ -3,11 +3,11 @@ import os
 
 from blockchain import Block
 
-
 DATA_FILE = "data/blockchain.json"
 
 
 def save_blockchain(blockchain):
+    """Save the complete blockchain ledger to a JSON file."""
     data = []
 
     for block in blockchain.chain:
@@ -27,6 +27,7 @@ def save_blockchain(blockchain):
 
 
 def load_blockchain():
+    """Load the stored blockchain ledger from the JSON file."""
     if not os.path.exists(DATA_FILE):
         return None
 
